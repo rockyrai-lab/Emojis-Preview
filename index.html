@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symbol Meaning Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            padding: 40px;
+            text-align: center;
+        }
+        h1 { color: #333; }
+        p { color: #666; margin-bottom: 30px; }
+        
+        .controls {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: inline-block;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover { background-color: #0056b3; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .symbol-display {
+            font-size: 64px;
+            margin-bottom: 10px;
+            /* Ensures colorful emojis on all systems */
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        .symbol-name {
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .symbol-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Symbol Collection</h1>
+    <p>Below represents your list. Click the button to download high-quality versions of these symbols.</p>
+
+    <div class="controls">
+        <button onclick="downloadAll()">Download All High-Res Images</button>
+    </div>
+
+    <div class="grid" id="cardGrid"></div>
+
+    <script>
+        const data = [
+            { icon: "🌱", name: "Sprout", meaning: "Growth, learning, personal development" },
+            { icon: "🌳", name: "Tree", meaning: "Stability, resilience, groundedness" },
+            { icon: "⭐", name: "Star", meaning: "Strengths, achievements, individuality" },
+            { icon: "✨", name: "Sparkle", meaning: "Special qualities, uniqueness" },
+            { icon: "🎨", name: "Palette", meaning: "Creativity, self-expression" },
+            { icon: "🌈", name: "Rainbow", meaning: "Diversity, individuality, inclusiveness" },
+            { icon: "🍃", name: "Leaf", meaning: "Calm, balance, emotional regulation" },
+            { icon: "🌸", name: "Flower", meaning: "Uniqueness, growth, beauty in differences" },
+            { icon: "🕊️", name: "Dove", meaning: "Peace, calm, gentle interaction" },
+            { icon: "❤️", name: "Heart", meaning: "Kindness, care, empathy" },
+            { icon: "😊", name: "Smiley", meaning: "Positive engagement, connection" },
+            { icon: "👀", name: "Eyes", meaning: "Observation, attention, being present" },
+            { icon: "🤝", name: "Hands", meaning: "Support, teamwork, collaboration" },
+            { icon: "🔍", name: "Magnifying Glass", meaning: "Curiosity, exploration, trying new things" },
+            { icon: "🛠️", name: "Tools", meaning: "Skills, problem-solving, capability" },
+            { icon: "▶️", name: "Play", meaning: "Initiative, starting tasks, choice" },
+            { icon: "⏸️", name: "Pause", meaning: "Rest, break, self-care" },
+            { icon: "🪁", name: "Kite", meaning: "Freedom, fun, creativity" },
+            { icon: "🌊", name: "Wave", meaning: "Flexibility, adapting to change" },
+            { icon: "🔗", name: "Link", meaning: "Connection, support networks" },
+            { icon: "🏹", name: "Target", meaning: "Focus, goal-setting" },
+            { icon: "🧩", name: "Puzzle Piece", meaning: "Individual uniqueness, contribution to team" },
+            { icon: "💡", name: "Lightbulb", meaning: "Ideas, thinking, problem-solving" },
+            { icon: "🪶", name: "Feather", meaning: "Lightness, gentleness, calm approach" },
+            { icon: "🌤️", name: "Sun", meaning: "Energy, balanced mood, readiness" },
+            { icon: "❄️", name: "Snowflake", meaning: "Uniqueness, calm, individuality" },
+            { icon: "🌟", name: "Shooting Star", meaning: "Aspirations, special qualities" },
+            { icon: "🎵", name: "Musical Note", meaning: "Expression, rhythm, mood" },
+            { icon: "🧭", name: "Compass", meaning: "Choice, direction, autonomy" },
+            { icon: "🏞️", name: "Mountain", meaning: "Strength, perseverance, achievement" }
+        ];
+
+        const grid = document.getElementById('cardGrid');
+
+        // Render the Grid on screen
+        data.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="symbol-display">${item.icon}</div>
+                <div class="symbol-name">${item.name}</div>
+                <div class="symbol-desc">${item.meaning}</div>
+            `;
+            grid.appendChild(card);
+        });
+
+        // Function to create High Res images
+        async function downloadAll() {
+            alert("Starting download... Please allow your browser to download multiple files if asked.");
+            
+            for (let i = 0; i < data.length; i++) {
+                downloadSymbol(data[i]);
+                // Small delay to prevent browser crashing/blocking
+                await new Promise(r => setTimeout(r, 200)); 
+            }
+        }
+
+        function downloadSymbol(item) {
+            const canvas = document.createElement('canvas');
+            const size = 1024; // High resolution size
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            // Clear background (make it transparent)
+            ctx.clearRect(0, 0, size, size);
+
+            // Configure text
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.font = `800px "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"`;
+            
+            // Draw Symbol
+            ctx.fillText(item.icon, size / 2, size / 1.7); // 1.7 adjustment centers emojis vertically better
+
+            // Create download link
+            const link = document.createElement('a');
+            link.download = `${item.name.replace(/ /g, '_')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>
